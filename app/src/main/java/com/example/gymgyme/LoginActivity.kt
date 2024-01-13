@@ -89,7 +89,7 @@ class LoginActivity : AppCompatActivity() {
                             SharedPreferencesManager.saveJWT(applicationContext, jwt)
 
                             // Redirect to Homepage
-                            val intent = Intent(this, HomePageActivity::class.java)
+                            val intent = Intent(this, AppActivity::class.java)
                             startActivity(intent)
                             finish()
                         } else {
