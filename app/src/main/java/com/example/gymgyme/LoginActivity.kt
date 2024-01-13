@@ -16,7 +16,15 @@ class LoginActivity : AppCompatActivity() {
         val signupButton = findViewById<Button>(R.id.signupButton)
 
         login.setOnClickListener {
-            // Add your login logic here
+            val usernameText = username.text.toString()
+            val passwordText = password.text.toString()
+
+            Thread {
+                // Perform network operation for login
+                // Use HttpUrlConnection or any other network library like Retrofit, OkHttp
+                // Example URL: "http://localhost:8000/auth/login"
+                // Don't forget to handle network exceptions and responses appropriately
+            }.start()
         }
 
         signupButton.setOnClickListener {
