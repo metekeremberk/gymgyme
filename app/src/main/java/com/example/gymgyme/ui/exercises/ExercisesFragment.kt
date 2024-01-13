@@ -4,39 +4,37 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.example.gymgyme.databinding.FragmentExercisesBinding
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.gymgyme.R
+import com.example.gymgyme.adapter.ExerciseListAdapter
 
 class ExercisesFragment : Fragment() {
 
-    private var _binding: FragmentExercisesBinding? = null
+    private val viewModel: ExercisesViewModel by viewModels()
+    private lateinit var exerciseAdapter: ExerciseListAdapter
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val dashboardViewModel =
-            ViewModelProvider(this).get(ExercisesViewModel::class.java)
-
-        _binding = FragmentExercisesBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        val textView: TextView = binding.textExercises
-        dashboardViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_exercises, container, false)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Initialize with an empty adapter
+        exerciseAdapter = ExerciseListAdapter(emptyList()) { exercise ->
+            // Handle 'More' button click
+        }
+        val rvExercises = view.findViewById<RecyclerView>(R.id.rvExercises)
+        rvExercises.layoutManager = LinearLayoutManager(context)
+        rvExercises.adapter = exerciseAdapter
+
+        viewModel.exercises.observe(viewLifecycleOwner) { exercises ->
+            // Update adapter's data
+            exerciseAdapter.exercises = exercises
+            exerciseAdapter.notifyDataSetChanged()
+        }
     }
 }
